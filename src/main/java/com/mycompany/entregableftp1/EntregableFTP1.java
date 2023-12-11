@@ -10,8 +10,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -75,18 +73,22 @@ public class EntregableFTP1 {
 
     public static void listar() {
         try {
-            System.out.println("Directorio actual: "
-                    + cliente.printWorkingDirectory());
+            if (cliente.isConnected()) {
+                System.out.println("Directorio actual: "
+                        + cliente.printWorkingDirectory());
 
-            FTPFile[] files = cliente.listFiles();
-            System.out.println("Ficheros en el directorio actual:"
-                    + files.length);
+                FTPFile[] files = cliente.listFiles();
+                System.out.println("Ficheros en el directorio actual:"
+                        + files.length);
 
-            String tipos[] = {"Fichero", "Directorio", "Enlace simb."};
+                String tipos[] = {"Fichero", "Directorio", "Enlace simb."};
 
-            for (int i = 0; i < files.length; i++) {
-                System.out.println("\t" + files[i].getName() + " => "
-                        + tipos[files[i].getType()]);
+                for (int i = 0; i < files.length; i++) {
+                    System.out.println("\t" + files[i].getName() + " => "
+                            + tipos[files[i].getType()]);
+                }
+            } else {
+                System.out.println("No estás conectado. Usa el comando 'Connect' primero.");
             }
 
         } catch (Exception e) {
@@ -112,7 +114,6 @@ public class EntregableFTP1 {
             try {
                 cliente.connect(servFTP);
                 cliente.enterLocalPassiveMode();
-                
 
                 boolean login = cliente.login(usuario, clave);
                 cliente.setFileType(FTP.BINARY_FILE_TYPE);
@@ -128,7 +129,7 @@ public class EntregableFTP1 {
                 ex.printStackTrace();
             }
 
-        }else{
+        } else {
             System.out.println("cliente ya conectado.");
         }
     }
@@ -143,8 +144,8 @@ public class EntregableFTP1 {
                 ex.printStackTrace();
             }
 
-        }else{
-            System.out.println("No esta conectado.");
+        } else {
+            System.out.println("No estás conectado. Usa el comando 'Connect' primero.");
         }
     }
 
@@ -176,11 +177,13 @@ public class EntregableFTP1 {
                 }
                 out.close();
 
+            } catch (FileNotFoundException ex) {
+                System.out.println("El fichero " + fichero + " no existe.");
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         } else {
-            System.out.println("cliente no conectado");
+            System.out.println("No estás conectado. Usa el comando 'Connect' primero.");
         }
 
     }
@@ -197,11 +200,13 @@ public class EntregableFTP1 {
                     System.out.println("Subida fallida.");
                 }
                 in.close();
+            } catch (FileNotFoundException ex) {
+                System.out.println("El fichero " + fichero + " no existe.");
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("cliente no conectado");
+            System.out.println("No estás conectado. Usa el comando 'Connect' primero.");
         }
 
     }
