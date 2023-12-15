@@ -21,9 +21,8 @@ import org.apache.commons.net.ftp.FTPFile;
  */
 public class EntregableFTP1 {
 
-    private static FTPClient cliente = new FTPClient(); //variable global - FEO
-
     public static void main(String[] args) {
+        FTPClient cliente = new FTPClient();
         Scanner sc = new Scanner(System.in);
 
         String servFTP = "";
@@ -34,7 +33,7 @@ public class EntregableFTP1 {
         String respuesta;
         String[] trozos;
         do {
-            System.out.println("Introduce el comando con el que quiera trabajar.");
+            System.out.print("-> ");
             respuesta = sc.nextLine();
             trozos = respuesta.split(" ");
             switch (trozos[0]) {
@@ -43,27 +42,27 @@ public class EntregableFTP1 {
                     String[] partes = trozos[2].split("/");
                     usuario = partes[0];
                     clave = partes[1];
-                    conectar(servFTP, usuario, clave);
+                    conectar(cliente, servFTP, usuario, clave);
                     break;
                 case "List":
                     if (cliente.isConnected()) {
-                        listar();
+                        listar(cliente);
                     } else {
                         System.out.println("No estás conectado. Usa el comando 'Connect' primero.");
                     }
                     break;
                 case "changePath":
                     String nuevoPath = trozos[1];
-                    cambiarDirectorio(nuevoPath);
+                    cambiarDirectorio(cliente, nuevoPath);
                     break;
                 case "down":
-                    descargar(trozos[1]);
+                    descargar(cliente, trozos[1]);
                     break;
                 case "up":
-                    subir(trozos[1]);
+                    subir(cliente, trozos[1]);
                     break;
                 case "back":
-                    cambiarDirectorio("/");
+                    cambiarDirectorio(cliente, "/");
                     break;
                 case "menu":
                     menuComandos();
@@ -74,10 +73,10 @@ public class EntregableFTP1 {
             }
 
         } while (!respuesta.equalsIgnoreCase("Disconnect"));
-        desconectar(servFTP, usuario, clave);
+        desconectar(cliente, servFTP, usuario, clave);
     }
 
-    public static void listar() {
+    public static void listar(FTPClient cliente) {
         try {
             if (cliente.isConnected()) {
                 System.out.println("Directorio actual: "
@@ -116,7 +115,7 @@ public class EntregableFTP1 {
         System.out.println("-------------------------------");
     }
 
-    public static void conectar(String servFTP, String usuario, String clave) {
+    public static void conectar(FTPClient cliente, String servFTP, String usuario, String clave) {
         if (!cliente.isConnected()) {
             try {
                 cliente.connect(servFTP);
@@ -141,7 +140,7 @@ public class EntregableFTP1 {
         }
     }
 
-    public static void desconectar(String servFTP, String usuario, String clave) {
+    public static void desconectar(FTPClient cliente, String servFTP, String usuario, String clave) {
         if (cliente.isConnected()) {
             try {
                 cliente.disconnect();
@@ -156,7 +155,7 @@ public class EntregableFTP1 {
         }
     }
 
-    public static void cambiarDirectorio(String nuevoPath) {
+    public static void cambiarDirectorio(FTPClient cliente, String nuevoPath) {
         try {
             if (cliente.isConnected()) {
                 boolean change = cliente.changeWorkingDirectory(nuevoPath);
@@ -173,7 +172,7 @@ public class EntregableFTP1 {
         }
     }
 
-    public static void descargar(String fichero) {
+    public static void descargar(FTPClient cliente, String fichero) {
         String archivo1 = fichero;
         String[] trozos = archivo1.split(("\\\\"));
 
@@ -185,7 +184,11 @@ public class EntregableFTP1 {
                 try {
                     FileOutputStream fileOutStream = new FileOutputStream(archivo1);
                     BufferedOutputStream out = new BufferedOutputStream(fileOutStream);
-
+                    File file = new File(archivo1);
+                    if (!file.exists()) {
+                        System.out.println("El fichero " + fichero + " no existe.");
+                        return;
+                    }
                     if (cliente.retrieveFile(fichero1, out)) {
                         System.out.println("Descargado correctamente.");
                     } else {
@@ -204,7 +207,14 @@ public class EntregableFTP1 {
         } else {
             if (cliente.isConnected()) {
                 try {
-                    BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream("C:\\FTP\\" + fichero));
+                  
+                   File file = new File("C:\\FTP\\" + fichero);
+                    BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file));
+                    
+                    if (!file.exists()) {
+                        System.out.println("El fichero " + fichero + " no existe.");
+                        return;
+                    }
                     if (cliente.retrieveFile(fichero, out)) {
                         System.out.println("Descargado exitosamente.");
                     } else {
@@ -224,7 +234,7 @@ public class EntregableFTP1 {
 
     }
 
-    public static void subir(String fichero) {
+    public static void subir(FTPClient cliente, String fichero) {
 
         String archivo1 = fichero;
         String[] trozos = archivo1.split(("\\\\"));
