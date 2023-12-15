@@ -5,6 +5,7 @@ package com.mycompany.entregableftp1;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -20,7 +21,7 @@ import org.apache.commons.net.ftp.FTPFile;
  */
 public class EntregableFTP1 {
 
-    private static FTPClient cliente = new FTPClient();
+    private static FTPClient cliente = new FTPClient(); //variable global - FEO
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -66,6 +67,9 @@ public class EntregableFTP1 {
                     break;
                 case "menu":
                     menuComandos();
+                    break;
+                default:
+                    System.out.println("comando incorrecto.");
                     break;
             }
 
@@ -170,46 +174,117 @@ public class EntregableFTP1 {
     }
 
     public static void descargar(String fichero) {
-        if (cliente.isConnected()) {
-            try {
-                BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream("C:\\FTP\\" + fichero));
-                if (cliente.retrieveFile(fichero, out)) {
-                    System.out.println("Descargado exitosamente.");
-                } else {
-                    System.out.println("Descarga fallida.");
-                }
-                out.close();
+        String archivo1 = fichero;
+        String[] trozos = archivo1.split(("\\\\"));
 
-            } catch (FileNotFoundException ex) {
-                System.out.println("El fichero " + fichero + " no existe.");
-            } catch (Exception ex) {
-                ex.printStackTrace();
+        if (trozos.length > 1) {
+            int indicador = trozos.length - 1;
+            String fichero1 = trozos[indicador];
+            if (cliente.isConnected()) {
+
+                try {
+                    FileOutputStream fileOutStream = new FileOutputStream(archivo1);
+                    BufferedOutputStream out = new BufferedOutputStream(fileOutStream);
+
+                    if (cliente.retrieveFile(fichero1, out)) {
+                        System.out.println("Descargado correctamente.");
+                    } else {
+                        System.out.println("Descargado fallida.");
+                    }
+                    out.close();
+                } catch (FileNotFoundException ex) {
+                    System.out.println("El fichero " + fichero + " no existe.");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("No estás conectado. Usa el comando 'Connect' primero.");
             }
+
         } else {
-            System.out.println("No estás conectado. Usa el comando 'Connect' primero.");
+            if (cliente.isConnected()) {
+                try {
+                    BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream("C:\\FTP\\" + fichero));
+                    if (cliente.retrieveFile(fichero, out)) {
+                        System.out.println("Descargado exitosamente.");
+                    } else {
+                        System.out.println("Descarga fallida.");
+                    }
+                    out.close();
+
+                } catch (FileNotFoundException ex) {
+                    System.out.println("El fichero " + fichero + " no existe.");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            } else {
+                System.out.println("No estás conectado. Usa el comando 'Connect' primero.");
+            }
         }
 
     }
 
     public static void subir(String fichero) {
-        String archivo = "C:\\FTP\\" + fichero;
-        if (cliente.isConnected()) {
-            try {
-                BufferedInputStream in = new BufferedInputStream(new FileInputStream(archivo));
 
-                if (cliente.storeFile(fichero, in)) {
-                    System.out.println("Subido correctamente.");
-                } else {
-                    System.out.println("Subida fallida.");
+        String archivo1 = fichero;
+        String[] trozos = archivo1.split(("\\\\"));
+
+        if (trozos.length > 1) {
+            int indicador = trozos.length - 1;
+            String fichero1 = trozos[indicador];
+            if (cliente.isConnected()) {
+
+                File file = new File(archivo1);
+                if (!file.exists()) {
+                    System.out.println("El fichero " + fichero + " no existe.");
+                    return;
                 }
-                in.close();
-            } catch (FileNotFoundException ex) {
-                System.out.println("El fichero " + fichero + " no existe.");
-            } catch (Exception e) {
-                e.printStackTrace();
+                try {
+                    FileInputStream fileInputStream = new FileInputStream(archivo1);
+                    BufferedInputStream in = new BufferedInputStream(fileInputStream);
+
+                    if (cliente.storeFile(fichero1, in)) {
+                        System.out.println("Subido correctamente.");
+                    } else {
+                        System.out.println("Subida fallida.");
+                    }
+                    in.close();
+                } catch (FileNotFoundException ex) {
+                    System.out.println("El fichero " + fichero + " no existe.");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("No estás conectado. Usa el comando 'Connect' primero.");
             }
+
         } else {
-            System.out.println("No estás conectado. Usa el comando 'Connect' primero.");
+            String archivo = "C:\\FTP\\" + fichero;
+            if (cliente.isConnected()) {
+
+                File file = new File(archivo);
+                if (!file.exists()) {
+                    System.out.println("El fichero " + fichero + " no existe.");
+                    return;
+                }
+                try {
+                    FileInputStream fileInputStream = new FileInputStream(archivo);
+                    BufferedInputStream in = new BufferedInputStream(fileInputStream);
+
+                    if (cliente.storeFile(fichero, in)) {
+                        System.out.println("Subido correctamente.");
+                    } else {
+                        System.out.println("Subida fallida.");
+                    }
+                    in.close();
+                } catch (FileNotFoundException ex) {
+                    System.out.println("El fichero " + fichero + " no existe.");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("No estás conectado. Usa el comando 'Connect' primero.");
+            }
         }
 
     }
