@@ -26,7 +26,6 @@ public class EntregableFTP1 {
         Scanner sc = new Scanner(System.in);
 
         String servFTP = "";
-//        System.out.println("Nos conectamos a: " + servFTP);
         String usuario = "";
         String clave = "";
 
@@ -61,6 +60,9 @@ public class EntregableFTP1 {
                     break;
                 case "up":
                     subir(trozos[1]);
+                    break;
+                case "back":
+                    cambiarDirectorio("/");
                     break;
                 case "menu":
                     menuComandos();
@@ -104,6 +106,7 @@ public class EntregableFTP1 {
         System.out.println("->changePath NuevoPath = Para cambiar el directorio remoto.");
         System.out.println("->down NombreFicheroRemoto = Para descargar fichero del servidor a local.");
         System.out.println("->up NombreFicheroLocal = Subir fichero de local al servidor. ");
+        System.out.println("->back = para volver al directorio de inicio. ");
         System.out.println("->menu = Si quiere volver a ver el contenido de este menu. ");
         System.out.println("->Disconnect = Para desconectar del servidor.");
         System.out.println("-------------------------------");
