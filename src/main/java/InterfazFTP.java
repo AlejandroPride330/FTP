@@ -153,6 +153,7 @@ public class InterfazFTP extends javax.swing.JFrame {
         jPanel1.add(actualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 257, 90, -1));
 
         servidorArea1.setColumns(20);
+        servidorArea1.setLineWrap(true);
         servidorArea1.setRows(5);
         servidorArea.setViewportView(servidorArea1);
 
@@ -189,7 +190,7 @@ public class InterfazFTP extends javax.swing.JFrame {
     private void disconectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_disconectActionPerformed
         // TODO add your handling code here:
 //        test.desconectar(cliente, servFTP, usuario, clave);
-        comandoArea.setText(comandoArea.getText()+" "+System.lineSeparator()+test.desconectar(cliente, servFTP, usuario, clave));
+        comandoArea.setText(comandoArea.getText()+System.lineSeparator()+test.desconectar(cliente, servFTP, usuario, clave));
     }//GEN-LAST:event_disconectActionPerformed
 
     private void conect1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conect1ActionPerformed
@@ -213,30 +214,33 @@ public class InterfazFTP extends javax.swing.JFrame {
     private void cambiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cambiarActionPerformed
         // TODO add your handling code here:
 //        test.cambiarDirectorio(cliente, newPath.getText());
-        comandoArea.setText(comandoArea.getText()+" "+System.lineSeparator()+test.cambiarDirectorio(cliente, newPath.getText()));
+        comandoArea.setText(comandoArea.getText()+System.lineSeparator()+test.cambiarDirectorio(cliente, newPath.getText()));
         newPath.setText("");
     }//GEN-LAST:event_cambiarActionPerformed
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         // TODO add your handling code here:
 //        test.cambiarDirectorio(cliente, "/");
-        comandoArea.setText(comandoArea.getText()+" "+System.lineSeparator()+test.cambiarDirectorio(cliente, "/"));
+        comandoArea.setText(comandoArea.getText()+System.lineSeparator()+test.cambiarDirectorio(cliente, "/"));
     }//GEN-LAST:event_backActionPerformed
 
     private void downActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downActionPerformed
         // TODO add your handling code here:
-        test.descargar(cliente, localPath.getText());
+//        test.descargar(cliente, localPath.getText());
+         comandoArea.setText(comandoArea.getText()+System.lineSeparator()+test.descargar(cliente, localPath.getText()));
     }//GEN-LAST:event_downActionPerformed
 
     private void upActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upActionPerformed
         // TODO add your handling code here:
-        test.subir(cliente, localPath.getText());
+//        test.subir(cliente, localPath.getText());
+        comandoArea.setText(comandoArea.getText()+System.lineSeparator()+test.subir(cliente, localPath.getText()));
     }//GEN-LAST:event_upActionPerformed
 
     private void actualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarActionPerformed
         // TODO add your handling code here:
-        test.listar(cliente);
-        servidorActionPerformed(evt);
+//        test.listar(cliente);
+        servidorArea1.setText( test.listar(cliente));
+//servidorActionPerformed(evt);
         
     }//GEN-LAST:event_actualizarActionPerformed
 

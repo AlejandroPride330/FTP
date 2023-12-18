@@ -59,10 +59,12 @@ public class EntregableFTP1 {
                     System.out.println(cambiarDirectorio(cliente, nuevoPath));
                     break;
                 case "down":
-                    descargar(cliente, trozos[1]);
+//                    descargar(cliente, trozos[1]);
+                    System.out.println(descargar(cliente, trozos[1]));
                     break;
                 case "up":
-                    subir(cliente, trozos[1]);
+//                    subir(cliente, trozos[1]);
+                    System.out.println(subir(cliente, trozos[1]));
                     break;
                 case "back":
 //                    cambiarDirectorio(cliente, "/");
@@ -92,8 +94,8 @@ public class EntregableFTP1 {
                 String arch = "";
 
                 FTPFile[] files = cliente.listFiles();
-                System.out.println("Ficheros en el directorio actual:"
-                        + files.length);
+//                System.out.println("Ficheros en el directorio actual:"
+//                        + files.length);
 
                 String tipos[] = {"Fichero", "Directorio", "Enlace simb."};
 
@@ -160,7 +162,7 @@ public class EntregableFTP1 {
     public static String desconectar(FTPClient cliente, String servFTP, String usuario, String clave) {
         String r = "";
         if (cliente.isConnected()) {
-            
+
             try {
                 cliente.disconnect();
 //                System.out.println("Desconectado correctamente.");
@@ -199,7 +201,8 @@ public class EntregableFTP1 {
         return r;
     }
 
-    public static void descargar(FTPClient cliente, String fichero) {
+    public static String descargar(FTPClient cliente, String fichero) {
+        String r = "";
         String archivo1 = fichero;
         String[] trozos = archivo1.split(("\\\\"));
 
@@ -213,22 +216,27 @@ public class EntregableFTP1 {
                     BufferedOutputStream out = new BufferedOutputStream(fileOutStream);
                     File file = new File(archivo1);
                     if (!file.exists()) {
-                        System.out.println("El fichero " + fichero + " no existe.");
-                        return;
+//                        System.out.println("El fichero " + fichero + " no existe.");
+                        r = "El fichero " + fichero + " no existe.";
+                        return r;
                     }
                     if (cliente.retrieveFile(fichero1, out)) {
-                        System.out.println("Descargado correctamente.");
+//                        System.out.println("Descargado correctamente.");
+                        r = "Descargado correctamente.";
                     } else {
-                        System.out.println("Descargado fallida.");
+//                        System.out.println("Descargado fallida.");
+                        r = "Descargado fallida.";
                     }
                     out.close();
                 } catch (FileNotFoundException ex) {
-                    System.out.println("El fichero " + fichero + " no existe.");
+//                    System.out.println("El fichero " + fichero + " no existe.");
+                    r = "El fichero " + fichero + " no existe.";
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else {
-                System.out.println("No estás conectado. Usa el comando 'Connect' primero.");
+//                System.out.println("No estás conectado. Usa el comando 'Connect' primero.");
+                r = "No estás conectado. Usa el comando 'Connect' primero.";
             }
 
         } else {
@@ -239,30 +247,35 @@ public class EntregableFTP1 {
                     BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file));
 
                     if (!file.exists()) {
-                        System.out.println("El fichero " + fichero + " no existe.");
-                        return;
+//                        System.out.println("El fichero " + fichero + " no existe.");
+                        r = "El fichero " + fichero + " no existe.";
+                        return r;
                     }
                     if (cliente.retrieveFile(fichero, out)) {
-                        System.out.println("Descargado exitosamente.");
+//                        System.out.println("Descargado exitosamente.");
+                        r = "Descargado exitosamente.";
                     } else {
-                        System.out.println("Descarga fallida.");
+//                        System.out.println("Descarga fallida.");
+                        r = "Descarga fallida.";
                     }
                     out.close();
 
                 } catch (FileNotFoundException ex) {
-                    System.out.println("El fichero " + fichero + " no existe.");
+//                    System.out.println("El fichero " + fichero + " no existe.");
+                    r = "El fichero " + fichero + " no existe.";
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             } else {
-                System.out.println("No estás conectado. Usa el comando 'Connect' primero.");
+//                System.out.println("No estás conectado. Usa el comando 'Connect' primero.");
+                r = "No estás conectado. Usa el comando 'Connect' primero.";
             }
         }
-
+        return r;
     }
 
-    public static void subir(FTPClient cliente, String fichero) {
-
+    public static String subir(FTPClient cliente, String fichero) {
+        String r = "";
         String archivo1 = fichero;
         String[] trozos = archivo1.split(("\\\\"));
 
@@ -273,26 +286,31 @@ public class EntregableFTP1 {
 
                 File file = new File(archivo1);
                 if (!file.exists()) {
-                    System.out.println("El fichero " + fichero + " no existe.");
-                    return;
+//                    System.out.println("El fichero " + fichero + " no existe.");
+                    r = "El fichero " + fichero + " no existe.";
+                    return r;
                 }
                 try {
                     FileInputStream fileInputStream = new FileInputStream(archivo1);
                     BufferedInputStream in = new BufferedInputStream(fileInputStream);
 
                     if (cliente.storeFile(fichero1, in)) {
-                        System.out.println("Subido correctamente.");
+//                        System.out.println("Subido correctamente.");
+                        r = "Subido correctamente.";
                     } else {
-                        System.out.println("Subida fallida.");
+//                        System.out.println("Subida fallida.");
+                        r = "Subida fallida.";
                     }
                     in.close();
                 } catch (FileNotFoundException ex) {
-                    System.out.println("El fichero " + fichero + " no existe.");
+//                    System.out.println("El fichero " + fichero + " no existe.");
+                    r = "El fichero " + fichero + " no existe.";
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else {
-                System.out.println("No estás conectado. Usa el comando 'Connect' primero.");
+//                System.out.println("No estás conectado. Usa el comando 'Connect' primero.");
+                r = "No estás conectado. Usa el comando 'Connect' primero.";
             }
 
         } else {
@@ -301,28 +319,33 @@ public class EntregableFTP1 {
 
                 File file = new File(archivo);
                 if (!file.exists()) {
-                    System.out.println("El fichero " + fichero + " no existe.");
-                    return;
+//                    System.out.println("El fichero " + fichero + " no existe.");
+                    r = "El fichero " + fichero + " no existe.";
+                    return r;
                 }
                 try {
                     FileInputStream fileInputStream = new FileInputStream(archivo);
                     BufferedInputStream in = new BufferedInputStream(fileInputStream);
 
                     if (cliente.storeFile(fichero, in)) {
-                        System.out.println("Subido correctamente.");
+//                        System.out.println("Subido correctamente.");
+                        r = "Subido correctamente.";
                     } else {
-                        System.out.println("Subida fallida.");
+//                        System.out.println("Subida fallida.");
+                        r = "Subida fallida.";
                     }
                     in.close();
                 } catch (FileNotFoundException ex) {
-                    System.out.println("El fichero " + fichero + " no existe.");
+//                    System.out.println("El fichero " + fichero + " no existe.");
+                    r = "El fichero " + fichero + " no existe.";
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else {
-                System.out.println("No estás conectado. Usa el comando 'Connect' primero.");
+//                System.out.println("No estás conectado. Usa el comando 'Connect' primero.");
+                r = "No estás conectado. Usa el comando 'Connect' primero.";
             }
         }
-
+        return r;
     }
 }
