@@ -160,6 +160,7 @@ public class EntregableFTP1 {
     public static String desconectar(FTPClient cliente, String servFTP, String usuario, String clave) {
         String r = "";
         if (cliente.isConnected()) {
+            
             try {
                 cliente.disconnect();
 //                System.out.println("Desconectado correctamente.");

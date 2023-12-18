@@ -1,6 +1,5 @@
 
 import com.mycompany.entregableftp1.EntregableFTP1;
-import static com.mycompany.entregableftp1.EntregableFTP1.cambiarDirectorio;
 import org.apache.commons.net.ftp.FTPClient;
 
 /*
@@ -37,9 +36,7 @@ public class InterfazFTP extends javax.swing.JFrame {
 
         jLabel3 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        servidor = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        comandos = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         serverName = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
@@ -57,6 +54,10 @@ public class InterfazFTP extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         back = new javax.swing.JButton();
         actualizar = new javax.swing.JButton();
+        servidorArea = new javax.swing.JScrollPane();
+        servidorArea1 = new javax.swing.JTextArea();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        comandoArea = new javax.swing.JTextArea();
 
         jLabel3.setText("jLabel3");
 
@@ -65,20 +66,8 @@ public class InterfazFTP extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 204, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        servidor.setAutoscrolls(false);
-        servidor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                servidorActionPerformed(evt);
-            }
-        });
-        jPanel1.add(servidor, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 340, 190));
-
         jLabel1.setText("Remoto");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, -1, -1));
-
-        comandos.setBackground(new java.awt.Color(204, 204, 255));
-        comandos.setText("-> ");
-        jPanel1.add(comandos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 740, 100));
 
         jLabel5.setText("Servidor");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, -1));
@@ -163,6 +152,20 @@ public class InterfazFTP extends javax.swing.JFrame {
         });
         jPanel1.add(actualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 257, 90, -1));
 
+        servidorArea1.setColumns(20);
+        servidorArea1.setRows(5);
+        servidorArea.setViewportView(servidorArea1);
+
+        jPanel1.add(servidorArea, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, 390, 170));
+
+        comandoArea.setBackground(new java.awt.Color(204, 204, 255));
+        comandoArea.setColumns(20);
+        comandoArea.setLineWrap(true);
+        comandoArea.setRows(5);
+        jScrollPane1.setViewportView(comandoArea);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 730, 110));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -183,17 +186,10 @@ public class InterfazFTP extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void servidorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_servidorActionPerformed
-        
-        servidor.setText(test.listar(cliente));
-         
-
-    }//GEN-LAST:event_servidorActionPerformed
-
     private void disconectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_disconectActionPerformed
         // TODO add your handling code here:
 //        test.desconectar(cliente, servFTP, usuario, clave);
-        comandos.setText(test.desconectar(cliente, servFTP, usuario, clave));
+        comandoArea.setText(comandoArea.getText()+" "+System.lineSeparator()+test.desconectar(cliente, servFTP, usuario, clave));
     }//GEN-LAST:event_disconectActionPerformed
 
     private void conect1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conect1ActionPerformed
@@ -207,7 +203,7 @@ public class InterfazFTP extends javax.swing.JFrame {
         usuario = user.getText();
         clave = contra;
 //        test.conectar(cliente, servFTP, usuario, clave);
-        comandos.setText(test.conectar(cliente, servFTP, usuario, clave));
+        comandoArea.setText(test.conectar(cliente, servFTP, usuario, clave));
     }//GEN-LAST:event_conect1ActionPerformed
 
     private void userActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userActionPerformed
@@ -217,14 +213,14 @@ public class InterfazFTP extends javax.swing.JFrame {
     private void cambiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cambiarActionPerformed
         // TODO add your handling code here:
 //        test.cambiarDirectorio(cliente, newPath.getText());
-        comandos.setText(test.cambiarDirectorio(cliente, newPath.getText()));
+        comandoArea.setText(comandoArea.getText()+" "+System.lineSeparator()+test.cambiarDirectorio(cliente, newPath.getText()));
         newPath.setText("");
     }//GEN-LAST:event_cambiarActionPerformed
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         // TODO add your handling code here:
 //        test.cambiarDirectorio(cliente, "/");
-        comandos.setText(test.cambiarDirectorio(cliente, "/"));
+        comandoArea.setText(comandoArea.getText()+" "+System.lineSeparator()+test.cambiarDirectorio(cliente, "/"));
     }//GEN-LAST:event_backActionPerformed
 
     private void downActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downActionPerformed
@@ -284,7 +280,7 @@ public class InterfazFTP extends javax.swing.JFrame {
     private javax.swing.JButton actualizar;
     private javax.swing.JButton back;
     private javax.swing.JButton cambiar;
-    private javax.swing.JTextField comandos;
+    private javax.swing.JTextArea comandoArea;
     private javax.swing.JButton conect1;
     private javax.swing.JButton disconect;
     private javax.swing.JButton down;
@@ -296,11 +292,13 @@ public class InterfazFTP extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField localPath;
     private javax.swing.JTextField newPath;
     private javax.swing.JPasswordField pass;
     private javax.swing.JTextField serverName;
-    private javax.swing.JTextField servidor;
+    private javax.swing.JScrollPane servidorArea;
+    private javax.swing.JTextArea servidorArea1;
     private javax.swing.JButton up;
     private javax.swing.JTextField user;
     // End of variables declaration//GEN-END:variables
