@@ -8,7 +8,7 @@ import org.apache.commons.net.ftp.FTPClient;
  */
 /**
  *
- * @author jacqueline
+ * @author Jacqueline AND Alex
  */
 public class InterfazFTP extends javax.swing.JFrame {
 
@@ -245,12 +245,15 @@ public class InterfazFTP extends javax.swing.JFrame {
         // TODO add your handling code here:
 //        test.descargar(cliente, localPath.getText());
         comandoArea.setText(comandoArea.getText() + System.lineSeparator() + test.descargar(cliente, localPath.getText()));
+        localPath.setText("");
+        
     }//GEN-LAST:event_downActionPerformed
 
     private void upActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upActionPerformed
         // TODO add your handling code here:
 //        test.subir(cliente, localPath.getText());
         comandoArea.setText(comandoArea.getText() + System.lineSeparator() + test.subir(cliente, localPath.getText()));
+        localPath.setText("");
     }//GEN-LAST:event_upActionPerformed
 
     /**

@@ -17,9 +17,10 @@ import org.apache.commons.net.ftp.FTPFile;
 
 /**
  *
- * @author Alex
+ * @author Alex AND Jacqueline
  */
 public class EntregableFTP1 {
+    /////////////////////////////////////////////////////
 
     public static void main(String[] args) {
         FTPClient cliente = new FTPClient();
@@ -213,18 +214,22 @@ public class EntregableFTP1 {
             if (cliente.isConnected()) {
 
                 try {
-                    FileOutputStream fileOutStream = new FileOutputStream(archivo1);
-                    BufferedOutputStream out = new BufferedOutputStream(fileOutStream);
+
                     FTPFile[] files = cliente.listFiles();
                     for (FTPFile file : files) {
                         System.out.println(file.getName());
                         if (file.getName().equals(fichero1)) {
                             existeFile = true;
-                           // System.out.println(fichero1);
+                            // System.out.println(fichero1);
                         }
                     }
 
-                    if (existeFile) {
+                    if (!existeFile) {
+                        r = "El fichero " + fichero1 + " no existe.";
+                        return r;
+                    } else {
+                        FileOutputStream fileOutStream = new FileOutputStream(archivo1);
+                        BufferedOutputStream out = new BufferedOutputStream(fileOutStream);
                         if (cliente.retrieveFile(fichero1, out)) {
 //                        System.out.println("Descargado correctamente.");
                             r = "Descargado correctamente.";
@@ -232,11 +237,10 @@ public class EntregableFTP1 {
 //                        System.out.println("Descargado fallida.");
                             r = "Descargado fallida.";
                         }
+
                         out.close();
-                    } else {
-                        r = "El fichero " + fichero1 + " no existe.";
-                        return r;
                     }
+
                 } catch (FileNotFoundException ex) {
 //                    System.out.println("El fichero " + fichero + " no existe.");
                     r = "El fichero " + fichero + " no existe.";
@@ -252,19 +256,22 @@ public class EntregableFTP1 {
             if (cliente.isConnected()) {
                 try {
                     boolean existeFile = false;
-                    File file = new File("C:\\FTP\\" + fichero);
-                    BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file));
+
                     FTPFile[] files = cliente.listFiles();
                     for (FTPFile file1 : files) {
                         if (file1.getName().equals(fichero)) {
                             existeFile = true;
-                           // System.out.println(fichero);
-                        }else{
-                            existeFile=false;
-                        }
+                            // System.out.println(fichero);
+                        } 
                     }
 
-                    if (existeFile) {
+                    if (!existeFile) {
+                        r = "El fichero " + fichero + " no existe.";
+                        return r;
+
+                    } else {
+                        File file = new File("C:\\FTP\\" + fichero);
+                        BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file));
                         if (cliente.retrieveFile(fichero, out)) {
 //                        System.out.println("Descargado exitosamente.");
                             r = "Descargado exitosamente.";
@@ -273,9 +280,7 @@ public class EntregableFTP1 {
                             r = "Descarga fallida.";
                         }
                         out.close();
-                    } else {
-                        r = "El fichero " + fichero + " no existe.";
-                        return r;
+
                     }
                 } catch (FileNotFoundException ex) {
 //                    System.out.println("El fichero " + fichero + " no existe.");
