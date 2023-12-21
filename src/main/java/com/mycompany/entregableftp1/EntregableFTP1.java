@@ -207,6 +207,7 @@ public class EntregableFTP1 {
         String[] trozos = archivo1.split(("\\\\"));
 
         if (trozos.length > 1) {
+            boolean existeFile = false;
             int indicador = trozos.length - 1;
             String fichero1 = trozos[indicador];
             if (cliente.isConnected()) {
@@ -214,20 +215,28 @@ public class EntregableFTP1 {
                 try {
                     FileOutputStream fileOutStream = new FileOutputStream(archivo1);
                     BufferedOutputStream out = new BufferedOutputStream(fileOutStream);
-                    File file = new File(archivo1);
-                    if (!file.exists()) {
-//                        System.out.println("El fichero " + fichero + " no existe.");
-                        r = "El fichero " + fichero + " no existe.";
+                    FTPFile[] files = cliente.listFiles();
+                    for (FTPFile file : files) {
+                        System.out.println(file.getName());
+                        if (file.getName().equals(fichero1)) {
+                            existeFile = true;
+                           // System.out.println(fichero1);
+                        }
+                    }
+
+                    if (existeFile) {
+                        if (cliente.retrieveFile(fichero1, out)) {
+//                        System.out.println("Descargado correctamente.");
+                            r = "Descargado correctamente.";
+                        } else {
+//                        System.out.println("Descargado fallida.");
+                            r = "Descargado fallida.";
+                        }
+                        out.close();
+                    } else {
+                        r = "El fichero " + fichero1 + " no existe.";
                         return r;
                     }
-                    if (cliente.retrieveFile(fichero1, out)) {
-//                        System.out.println("Descargado correctamente.");
-                        r = "Descargado correctamente.";
-                    } else {
-//                        System.out.println("Descargado fallida.");
-                        r = "Descargado fallida.";
-                    }
-                    out.close();
                 } catch (FileNotFoundException ex) {
 //                    System.out.println("El fichero " + fichero + " no existe.");
                     r = "El fichero " + fichero + " no existe.";
@@ -242,27 +251,36 @@ public class EntregableFTP1 {
         } else {
             if (cliente.isConnected()) {
                 try {
-
+                    boolean existeFile = false;
                     File file = new File("C:\\FTP\\" + fichero);
                     BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file));
+                    FTPFile[] files = cliente.listFiles();
+                    for (FTPFile file1 : files) {
+                        if (file1.getName().equals(fichero)) {
+                            existeFile = true;
+                           // System.out.println(fichero);
+                        }else{
+                            existeFile=false;
+                        }
+                    }
 
-                    if (!file.exists()) {
-//                        System.out.println("El fichero " + fichero + " no existe.");
+                    if (existeFile) {
+                        if (cliente.retrieveFile(fichero, out)) {
+//                        System.out.println("Descargado exitosamente.");
+                            r = "Descargado exitosamente.";
+                        } else {
+//                        System.out.println("Descarga fallida.");
+                            r = "Descarga fallida.";
+                        }
+                        out.close();
+                    } else {
                         r = "El fichero " + fichero + " no existe.";
                         return r;
                     }
-                    if (cliente.retrieveFile(fichero, out)) {
-//                        System.out.println("Descargado exitosamente.");
-                        r = "Descargado exitosamente.";
-                    } else {
-//                        System.out.println("Descarga fallida.");
-                        r = "Descarga fallida.";
-                    }
-                    out.close();
-
                 } catch (FileNotFoundException ex) {
 //                    System.out.println("El fichero " + fichero + " no existe.");
                     r = "El fichero " + fichero + " no existe.";
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
